@@ -17,7 +17,7 @@
 
 //	public abstract class JSingleton<T> : JActor where T : JActor
 //	{
-//		#region [º¯¼ö] Internal
+//		#region [ë³€ìˆ˜] Internal
 //		private static T _instance = null;
 //		private static object _syncobj = new object();
 //		private static bool _appIsClosing = false;
@@ -60,7 +60,7 @@
 //		}
 //		#endregion
 
-//		#region [Á¾·á] OnApplicationQuit
+//		#region [ì¢…ë£Œ] OnApplicationQuit
 //		//------------------------------------------------------------------------------------------------------------------------------------------------------
 //		protected virtual void OnApplicationQuit()
 //		{

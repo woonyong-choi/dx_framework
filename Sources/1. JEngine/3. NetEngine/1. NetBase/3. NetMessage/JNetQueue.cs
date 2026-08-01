@@ -32,17 +32,17 @@ namespace J2y.Network
     public sealed class JNetQueue<T>
     {
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        // º¯¼ö/Property
+        // ë³€ìˆ˜/Property
         //
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        #region [º¯¼ö] Items
+        #region [ë³€ìˆ˜] Items
         private T[] m_items;
         private int m_size;
         private int m_head;
         #endregion
 
-        #region [º¯¼ö] Thread Lock
+        #region [ë³€ìˆ˜] Thread Lock
         private readonly ReaderWriterLockSlim m_lock = new ReaderWriterLockSlim();
         #endregion
 
@@ -52,7 +52,7 @@ namespace J2y.Network
         //
         //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        #region [ÃÊ±âÈ­] »ı¼ºÀÚ
+        #region [ì´ˆê¸°í™”] ìƒì„±ì
         //------------------------------------------------------------------------------------------------------------------------------------------------------
         /// <summary>
         /// NetQueue constructor

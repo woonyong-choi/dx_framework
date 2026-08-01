@@ -13,11 +13,11 @@ namespace J2y
         public sealed class Evnet
         {
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-            // �̺�Ʈ
+            // 이벤트
             //
             //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-            #region [�̺�Ʈ] Change
+            #region [이벤트] Change
             public const string OnBegineChangeSubScene = "OnBegineChangeSubScene";
             public const string OnEndChangeSubScene = "OnEndChangeSubScene";
             #endregion

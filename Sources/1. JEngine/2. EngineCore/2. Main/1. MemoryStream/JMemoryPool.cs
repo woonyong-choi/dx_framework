@@ -19,7 +19,7 @@ namespace J2y
     //			- ReturnMemoryStream(ms);
     //
     //		2. JMemoryPool.GetRecyclableMemoryStream();
-    //			- Return ÇÊ¿ä ¾øÀ½
+    //			- Return í•„ìš” ì—†ìŒ
     //
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -109,7 +109,7 @@ namespace J2y
             bufferSize = GetMemoryPoolBufferSize(bufferSize);
             var buffer = GetBuffer(bufferSize);
 
-            // todo: MemoryPool¿¡¼­ °®°í ¿À±â(µ¥ÀÌÅÍ »çÀÌÁî¸¦ ¸ğ¸£´Ï ¸Ş¸ğ¸®Ç®¿¡¼­ °®°í ¿Ã ¼ö ¾ø´Ù. GC°¡ ´õ ÃÖÀûÈ­¸¦ ÀßÇÒ µí ÇÏ´Ù)
+            // todo: MemoryPoolì—ì„œ ê°–ê³  ì˜¤ê¸°(ë°ì´í„° ì‚¬ì´ì¦ˆë¥¼ ëª¨ë¥´ë‹ˆ ë©”ëª¨ë¦¬í’€ì—ì„œ ê°–ê³  ì˜¬ ìˆ˜ ì—†ë‹¤. GCê°€ ë” ìµœì í™”ë¥¼ ì˜í•  ë“¯ í•˜ë‹¤)
             var stream = new MemoryStream(buffer, 0, buffer.Length, true, true);
             return stream;
         }

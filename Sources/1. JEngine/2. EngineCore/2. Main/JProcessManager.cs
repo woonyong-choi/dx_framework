@@ -16,7 +16,7 @@ public class JProcessManager
 {
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // º¯¼ö
+    // ë³€ìˆ˜
     //
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -109,12 +109,12 @@ public class JProcessManager
 
 
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // ¿ÜºÎ ÇÁ·Î¼¼½º ½ÇÇà
+    // ì™¸ë¶€ í”„ë¡œì„¸ìŠ¤ ì‹¤í–‰
     //
     //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 
-    #region [¿ÜºÎÇÁ·Î¼¼½º] ½ÇÇà
+    #region [ì™¸ë¶€í”„ë¡œì„¸ìŠ¤] ì‹¤í–‰
     //------------------------------------------------------------------------------------------------------------------------------------------------------
     public static Process RunProgram(string programName, string arguments, bool hidden = false, bool waitForExit = false)
     {
@@ -171,7 +171,7 @@ public class JProcessManager
     }
     #endregion
 
-    #region [¿ÜºÎÇÁ·Î¼¼½º] Á¾·á
+    #region [ì™¸ë¶€í”„ë¡œì„¸ìŠ¤] ì¢…ë£Œ
     //------------------------------------------------------------------------------------------------------------------------------------------------------    
     public static void ExitProgram(string programName)
     {
@@ -182,7 +182,7 @@ public class JProcessManager
         {
             try
             {
-                //UnityEngine.Debug.Log("[ÇÁ·Î±×·¥]" + proc.ProcessName);
+                //UnityEngine.Debug.Log("[í”„ë¡œê·¸ë¨]" + proc.ProcessName);
                 if ((proc.ProcessName == programName) && (current.Id != proc.Id))
                     proc.Kill();
             }
@@ -200,7 +200,7 @@ public class JProcessManager
     }
     #endregion
 
-    #region [¿ÜºÎÇÁ·Î¼¼½º] ½ÇÇàÁßÀÎÁö
+    #region [ì™¸ë¶€í”„ë¡œì„¸ìŠ¤] ì‹¤í–‰ì¤‘ì¸ì§€
     //------------------------------------------------------------------------------------------------------------------------------------------------------
     public static bool IsRunningProgram(string programName)
     {
@@ -221,7 +221,7 @@ public class JProcessManager
     }
     #endregion
 
-    #region [¿ÜºÎÇÁ·Î¼¼½º] Ã£±â
+    #region [ì™¸ë¶€í”„ë¡œì„¸ìŠ¤] ì°¾ê¸°
     //------------------------------------------------------------------------------------------------------------------------------------------------------
     public static Process FindProgram(string programName)
     {
@@ -267,7 +267,7 @@ public class JProcessManager
     }
     #endregion
 
-    #region [ÇÁ·Î¼¼½º] ID·Î À©µµ¿ì ÇÚµé Ã£±â
+    #region [í”„ë¡œì„¸ìŠ¤] IDë¡œ ìœˆë„ìš° í•¸ë“¤ ì°¾ê¸°
 
     public static IntPtr GetWindowHandle(Process process, string program_title = null)
     {
