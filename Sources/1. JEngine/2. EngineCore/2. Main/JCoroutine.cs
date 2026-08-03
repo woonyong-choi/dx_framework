@@ -96,10 +96,8 @@ namespace J2y
         //------------------------------------------------------------------------------------------------------------------------------------------------------
         public void StopAll()
         {
-            while (_routines.Count > 0)
-                _routines.RemoveAt(0);
-            while (_delays.Count > 0)
-                _delays.RemoveAt(0);
+            _routines.Clear();
+            _delays.Clear();
         }
         #endregion
 

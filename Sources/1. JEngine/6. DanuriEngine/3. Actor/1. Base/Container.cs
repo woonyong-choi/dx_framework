@@ -35,12 +35,12 @@ namespace J2y
         {
             while (null != container)
             {
-                if (container.IsActive()) return false;
+                if (!container.IsActive()) return true;
 
                 container = container.GetParent();
             }
 
-            return true;
+            return false;
         }
         #endregion
 
@@ -64,7 +64,7 @@ namespace J2y
 
             return 0 == containers.Count ? null : containers[0];
         }
-        public static Container FindInParent(this Container container, Enum name) { return container.Find(name.ToString()); }
+        public static Container FindInParent(this Container container, Enum name) { return container.FindInParent(name.ToString()); }
         //------------------------------------------------------------------------------------------------------------------------------------------------------
         public static Container[] FindAll(this Container container, string name)
         {
@@ -84,7 +84,7 @@ namespace J2y
 
             return 0 == containers.Count ? null : containers.ToArray();
         }
-        public static Container[] FindAllInParent(this Container container, Enum name) { return container.FindAll(name.ToString()); }
+        public static Container[] FindAllInParent(this Container container, Enum name) { return container.FindAllInParent(name.ToString()); }
         #endregion
 
         #region [Container] [Find] Internal
