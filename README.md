@@ -8,11 +8,11 @@
 | 왜 | 협업사 10곳의 콘텐츠를 개발 중인 자체 엔진의 변경에서 지키기 위해 |
 | 내 몫 | 이 저장소의 C# 코드 전부. 엔진 본체와 C++/CLI 프록시는 ㈜코드쓰리 자산이라 제외 |
 | 스택 | C# · C++/CLI 경계 · DirectX 11 자체 엔진 위 |
-| 검증된 사실 | 콘텐츠 쪽 코드([dx_content_interface](https://github.com/woonyong-kr/dx_content_interface))에 네이티브 호출(DllImport)이 0건이다. 엔진과는 관리되는 C# 표면으로만 만난다 |
+| 검증된 사실 | 외부 라이브러리를 제외한 C# 82파일·15,662줄. 순수 C# 코루틴 계약 테스트를 독립 실행할 수 있다 |
 | 한계 | 프록시 DLL 이 비공개라 단독 빌드는 불가. 구조 열람용 공개 |
 
 **같은 사람의 다른 저장소** · 이력서 허브: <https://woonyong-kr.github.io>
-[Kyro(k8s-ops)](https://github.com/woonyong-kr/k8s-ops) · [MiniDB](https://github.com/woonyong-kr/minidb) · [PintOS](https://github.com/woonyong-kr/pintos) · [dx_framework](https://github.com/woonyong-kr/dx_framework) · [dx_content_interface](https://github.com/woonyong-kr/dx_content_interface)
+[Kyro(k8s-ops)](https://github.com/woonyong-kr/k8s-ops) · [MiniDB](https://github.com/woonyong-kr/minidb) · [PintOS](https://github.com/woonyong-kr/pintos) · [dx_framework](https://github.com/woonyong-kr/dx_framework)
 
 
 3D · XR 콘텐츠 제작용 자체 엔진(다누리) 위에 올린 C# 프레임워크입니다.
@@ -44,12 +44,14 @@ C# 프레임워크 (이 저장소)             ← 콘텐츠가 만나는 유일
 | 액터 | `Sources/1. JEngine/6. DanuriEngine/3. Actor/` | `OnCreate → OnEnable → Update → OnDisable → OnDestroy` 생명주기, `GetComponent<T>` |
 | 씬 · 입력 | `Sources/1. JEngine/6. DanuriEngine/2. MainCore/` | 코루틴 기반 씬 전환, 포인터 상태, 레이 피킹 |
 | 고정밀 타이머 | `HighPrecisionTimer/` | 별도 프로젝트 |
+| 독립 검증 | `tests/JCoroutine.ContractTests/` | 지연·중첩·중단·전체 중단 계약을 엔진 DLL 없이 실행 |
 
 설계 어휘를 Unity 와 같게 맞췄습니다. 콘텐츠 개발자 대부분이 Unity 경험자라,
 새 API 를 배우는 비용을 없애는 것이 가장 싼 온보딩이었기 때문입니다.
 
-이 프레임워크를 사용하는 콘텐츠 쪽 코드는
-[dx_content_interface](https://github.com/woonyong-kr/dx_content_interface) 에 있습니다.
+저장소 안에서도 `JFbx`, `JWidget`, `JPanel`, `JUICamera`가 `JActor`의 생명주기와
+`GetComponent<T>`를 사용하는 실제 소비자다. 별도 콘텐츠 저장소는 공개 범위를 줄이기
+위해 비공개로 보존한다.
 
 ## 빌드에 대하여
 
@@ -57,6 +59,12 @@ C# 프레임워크 (이 저장소)             ← 콘텐츠가 만나는 유일
 `CLIInterface.dll`(C++/CLI 프록시)은 ㈜코드쓰리의 자산이라 포함하지 않았습니다.
 프록시가 어떤 모양인지는 [docs/examples/CliProxyExample.md](docs/examples/CliProxyExample.md)
 에 재구성 예시로 정리했습니다.
+
+엔진 DLL이 필요 없는 코루틴 계층은 .NET 9에서 독립 검증할 수 있다.
+
+```bash
+dotnet run --project tests/JCoroutine.ContractTests
+```
 
 ## 내 것과 내 것이 아닌 것
 
