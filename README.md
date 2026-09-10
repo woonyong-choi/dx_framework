@@ -1,94 +1,38 @@
-# JFramework — 다누리 XR 엔진의 C# 프레임워크 계층
+# 🧱 JFramework · dx_framework
 
-## 한눈에
+다누리 XR 엔진 위에서 콘텐츠가 사용하는 C# 프레임워크입니다. 생명주기·코루틴·이벤트 API를 제공하고 C++ 엔진 변경을 프록시 경계에서 흡수하도록 구성했습니다.
 
-| 구분 | 내용 |
-|---|---|
-| 무엇 | 다누리 XR 엔진 위의 C# 프레임워크. 엔진이 바뀌어도 콘텐츠가 깨지지 않게 하는 한 겹 |
-| 왜 | 협업사 10곳의 콘텐츠를 개발 중인 자체 엔진의 변경에서 지키기 위해 |
-| 내 몫 | 이 저장소의 C# 코드 전부. 엔진 본체와 C++/CLI 프록시는 ㈜코드쓰리 자산이라 제외 |
-| 스택 | C# · C++/CLI 경계 · DirectX 11 자체 엔진 위 |
-| 검증된 사실 | 외부 라이브러리를 제외한 C# 82파일·15,662줄. 순수 C# 코루틴 계약 테스트를 독립 실행할 수 있다 |
-| 한계 | 프록시 DLL 이 비공개라 단독 빌드는 불가. 구조 열람용 공개 |
+**프레임워크 소스 공개용 저장소입니다.** 비공개 `CLIInterface.dll`이 필요해 전체 엔진을 독립 빌드할 수 없습니다. 엔진 DLL이 필요 없는 코루틴 계층은 별도로 실행할 수 있습니다.
 
-**같은 사람의 다른 저장소** · 이력서 허브: <https://woonyong-kr.github.io>
-[Kyro(k8s-ops)](https://github.com/woonyong-kr/k8s-ops) · [MiniDB](https://github.com/woonyong-kr/minidb) · [PintOS](https://github.com/woonyong-kr/pintos) · [dx_framework](https://github.com/woonyong-kr/dx_framework)
+[프록시 재구성 예제](docs/examples/CliProxyExample.md) · [GitHub 프로필](https://github.com/woonyong-kr)
 
+## 실행 가능한 부분
 
-3D · XR 콘텐츠 제작용 자체 엔진(다누리) 위에 올린 C# 프레임워크입니다.
-협업사 10곳이 콘텐츠를 만들던 개발 중인 엔진에서, **엔진이 바뀌어도
-콘텐츠가 깨지지 않는 한 겹**을 만드는 것이 목적이었습니다.
-
-```
-C++ 엔진 (extern "C" 655개 함수)      ← ㈜코드쓰리, 비공개
-   ↓
-C++/CLI 프록시 (CLIInterface)         ← ㈜코드쓰리, 비공개 (패턴 예시는 docs/examples)
-   ↓
-C# 프레임워크 (이 저장소)             ← 콘텐츠가 만나는 유일한 API
-   ↓
-콘텐츠 (협업사 10곳)
-```
-
-핵심 규칙은 하나입니다. **C++ 엔진을 직접 부르는 코드는 콘텐츠에 없다.**
-콘텐츠와 프레임워크는 관리되는 C# 표면(CLIInterface · JFramework)만 쓰고,
-네이티브 함수 서명이 바뀌면 프록시와 이 저장소가 흡수합니다. 열 곳의
-콘텐츠는 바뀐 것을 모릅니다.
-
-## 코드 지도
-
-| 영역 | 위치 | 내용 |
-|---|---|---|
-| 코루틴 | `Sources/1. JEngine/2. EngineCore/2. Main/JCoroutine.cs` | `IEnumerator` 기반 실행기 — 중첩 코루틴, `yield return 1.5f` 지연 |
-| 이벤트 | `Sources/1. JEngine/2. EngineCore/3. EventSystem/` | 문자열 키 델리게이트 허브(JEventHandler) · 예약 실행/배속(JScheduler) |
-| 수학 | `Sources/1. JEngine/2. EngineCore/1. Math/` | Vector · Quaternion · Easing |
-| 액터 | `Sources/1. JEngine/6. DanuriEngine/3. Actor/` | `OnCreate → OnEnable → Update → OnDisable → OnDestroy` 생명주기, `GetComponent<T>` |
-| 씬 · 입력 | `Sources/1. JEngine/6. DanuriEngine/2. MainCore/` | 코루틴 기반 씬 전환, 포인터 상태, 레이 피킹 |
-| 고정밀 타이머 | `HighPrecisionTimer/` | 별도 프로젝트 |
-| 독립 검증 | `tests/JCoroutine.ContractTests/` | 지연·중첩·중단·전체 중단 계약을 엔진 DLL 없이 실행 |
-
-설계 어휘를 Unity 와 같게 맞췄습니다. 콘텐츠 개발자 대부분이 Unity 경험자라,
-새 API 를 배우는 비용을 없애는 것이 가장 싼 온보딩이었기 때문입니다.
-
-저장소 안에서도 `JFbx`, `JWidget`, `JPanel`, `JUICamera`가 `JActor`의 생명주기와
-`GetComponent<T>`를 사용하는 실제 소비자다. 별도 콘텐츠 저장소는 공개 범위를 줄이기
-위해 비공개로 보존한다.
-
-## 빌드에 대하여
-
-이 저장소만으로는 빌드되지 않습니다. `JFramework.csproj` 가 참조하는
-`CLIInterface.dll`(C++/CLI 프록시)은 ㈜코드쓰리의 자산이라 포함하지 않았습니다.
-프록시가 어떤 모양인지는 [docs/examples/CliProxyExample.md](docs/examples/CliProxyExample.md)
-에 재구성 예시로 정리했습니다.
-
-엔진 DLL이 필요 없는 코루틴 계층은 .NET 9에서 독립 검증할 수 있다.
+[.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)를 설치한 뒤 실행합니다.
 
 ```bash
 dotnet run --project tests/JCoroutine.ContractTests
 ```
 
-## 내 것과 내 것이 아닌 것
+이 프로그램은 실제 `JCoroutine.cs`를 포함해 지연·중첩·중단·전체 중단을 검사합니다. 전체 XR 엔진이나 렌더링의 실행 검증을 대신하지는 않습니다.
 
-- **내 것** — 이 저장소의 C# 코드 전부 (JEngine · DanuriEngine 계층 · HighPrecisionTimer)
-- **내 것이 아닌 것** — C++ 엔진 본체 · 렌더러(DirectX 11 · OpenGL ES) · PBR 셰이더 · C++/CLI 프록시 소스 (㈜코드쓰리),
-  `RecyclableMemoryStream` (Microsoft, MIT — 원 라이선스 헤더 유지)
+## 구조와 설계
 
-git 이력은 퇴사 후 통째로 올린 것이라 커밋 수는 근거가 되지 않습니다.
-코드가 근거입니다.
+C++ 엔진 → C++/CLI 프록시 → C# 프레임워크 → 콘텐츠로 연결됩니다. 콘텐츠가 네이티브 엔진을 직접 호출하지 않도록 관리 API에 경계를 모았습니다. Unity 경험이 있는 콘텐츠 개발자가 익숙한 생명주기와 API를 사용할 수 있도록 설계했습니다.
 
-## 더 읽기
+| 코드 | 역할 |
+| --- | --- |
+| [JCoroutine.cs](Sources/1.%20JEngine/2.%20EngineCore/2.%20Main/JCoroutine.cs) | IEnumerator 기반 중첩·지연 코루틴 |
+| [EventSystem](Sources/1.%20JEngine/2.%20EngineCore/3.%20EventSystem/) | 문자열 키 이벤트와 예약 실행 |
+| [Math](Sources/1.%20JEngine/2.%20EngineCore/1.%20Math/) | Vector, Quaternion, Easing |
+| [Actor](Sources/1.%20JEngine/6.%20DanuriEngine/3.%20Actor/) | OnCreate부터 OnDestroy까지의 생명주기·GetComponent |
+| [MainCore](Sources/1.%20JEngine/6.%20DanuriEngine/2.%20MainCore/) | 씬 전환·입력·ray picking |
+| [HighPrecisionTimer](HighPrecisionTimer/) | 별도 타이머 프로젝트 |
 
-- [엔진 위에 올린 한 겹 — 생명주기 · 코루틴 · 이벤트](https://woonyong-kr.github.io/#/posts/jengine-layer)
-- [655개 함수와 열 개 회사 사이 — 프록시 경계](https://woonyong-kr.github.io/#/posts/cli-proxy)
-- [열 개 회사의 소스를 한곳으로](https://woonyong-kr.github.io/#/posts/source-integration)
+`JFbx`, `JWidget`, `JPanel`, `JUICamera`는 프레임워크 안에서 Actor 생명주기와 `GetComponent<T>`를 사용하는 실제 소비자입니다.
 
----
+## 기여와 공개 범위
 
-## 만든 사람
+최우녕이 C# 프레임워크와 HighPrecisionTimer를 구현했습니다. C++ 엔진·렌더러·셰이더와 C++/CLI 프록시는 ㈜코드쓰리 자산으로 공개하지 않습니다. 프록시 문서는 원본 코드가 아닌 재구성 예제입니다.
 
-**최우녕** — AI 애플리케이션을 만듭니다. LLM 의 판단 범위를 계약과
-테스트로 고정하고, 만든 것은 골든셋 · 실측 벤치마크로 검증합니다.
-게임사 총괄 PD 로 프로젝트 7건을 리딩한 뒤, 기술 결정의 근거를
-바닥부터 다시 확인하기 위해 크래프톤 정글에서 OS · DB · 웹 서버를
-직접 구현했습니다.
-
-woonyong.kr@gmail.com
+외부 코드인 Microsoft의 `RecyclableMemoryStream`은 저작권과 MIT 라이선스 표시를 유지합니다. Git 이력은 퇴사 후 일괄 업로드한 것이므로 커밋 수를 기여 근거로 사용하지 않습니다.
