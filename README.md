@@ -1,10 +1,12 @@
-# 🧱 JFramework · dx_framework
+# JFramework · dx_framework
 
-다누리 XR 엔진 위에서 콘텐츠가 사용하는 C# 프레임워크입니다. 생명주기·코루틴·이벤트 API를 제공하고 C++ 엔진 변경을 프록시 경계에서 흡수하도록 구성했습니다.
+다누리 XR의 C++ 엔진과 3D 콘텐츠 사이에서 액터 생명주기, 코루틴, 이벤트를 제공하는 C# 프레임워크입니다.
 
-**프레임워크 소스 공개용 저장소입니다.** 비공개 `CLIInterface.dll`이 필요해 전체 엔진을 독립 빌드할 수 없습니다. 엔진 DLL이 필요 없는 코루틴 계층은 별도로 실행할 수 있습니다.
+- 콘텐츠가 네이티브 엔진을 직접 호출하지 않도록 C++/CLI 프록시 뒤에 관리 API를 모았습니다.
+- C# 프레임워크와 `HighPrecisionTimer`를 구현해 실제 3D 콘텐츠 개발에 사용했습니다.
+- 원본 엔진과 `CLIInterface.dll`은 비공개입니다. 공개 저장소에서는 엔진에 의존하지 않는 코루틴 계약 4개만 실행할 수 있습니다.
 
-[프록시 재구성 예제](docs/examples/CliProxyExample.md) · [GitHub 프로필](https://github.com/woonyong-kr)
+[프록시 재구성 예제](docs/examples/CliProxyExample.md) · [GitHub 프로필](https://github.com/woonyong-choi)
 
 ## 실행 가능한 부분
 
