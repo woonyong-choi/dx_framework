@@ -11,10 +11,6 @@
 
 C++/CLI로 노출된 엔진 API 위에 콘텐츠 개발에서 반복해서 쓰는 기능을 모은 C# 계층입니다. 이 저장소는 구현한 프레임워크 소스를 공개하는 포트폴리오입니다.
 
-## 목차
-
-- [문제와 제약](#문제와-제약) · [설계 결정](#설계-결정) · [구현](#구현) · [실행](#실행) · [문서와 변경 이력](#문서와-변경-이력) · [기여와 공개 범위](#기여와-공개-범위)
-
 ## 문제와 제약
 
 다누리 XR의 C++ 엔진 위에서 3D 콘텐츠를 작성하려면 액터 초기화, 컴포넌트 조회, 프레임 갱신을 C# 코드와 연결해야 합니다. JFramework는 Unity와 비슷한 생명주기와 API로 이 공통 처리를 제공합니다.
@@ -59,8 +55,12 @@ JCoroutine contracts: 4/4 passed
 
 ## 문서와 변경 이력
 
-- [C++/CLI 프록시 재구성 예제](docs/examples/CliProxyExample.md)
-- [커밋 이력](https://github.com/woonyong-choi/dx_framework/commits/main/) · [이슈](https://github.com/woonyong-choi/dx_framework/issues) · [PR](https://github.com/woonyong-choi/dx_framework/pulls)
+- 엔진 연동
+  - [C++/CLI 프록시](docs/examples/CliProxyExample.md)
+- 공개 기록
+  - [커밋](https://github.com/woonyong-choi/dx_framework/commits/main/)
+  - [이슈](https://github.com/woonyong-choi/dx_framework/issues)
+  - [PR](https://github.com/woonyong-choi/dx_framework/pulls)
 
 <details>
 <summary>공개 저장소의 주요 변경</summary>
