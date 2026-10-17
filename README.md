@@ -1,43 +1,34 @@
-# JFramework · dx_framework
+<h1 align="center">JFramework</h1>
 
-다누리 XR 엔진의 액터 생명주기·코루틴·이벤트를 제공하는 C# 프레임워크입니다.
+<p align="center">
+  다누리 XR 콘텐츠를 위한 C# 프레임워크<br>
+  액터 생명주기 · 컴포넌트 조회 · 코루틴 · 이벤트
+</p>
 
-[![CI](https://github.com/woonyong-choi/dx_framework/actions/workflows/ci.yml/badge.svg)](https://github.com/woonyong-choi/dx_framework/actions/workflows/ci.yml)
+<p align="center">
+  <a href="https://github.com/woonyong-choi/dx_framework/actions/workflows/ci.yml"><img src="https://github.com/woonyong-choi/dx_framework/actions/workflows/ci.yml/badge.svg" alt="코루틴 검사 CI"></a>
+</p>
 
-> [!NOTE]
-> 프레임워크 소스를 공개하는 포트폴리오 저장소입니다. 전체 엔진 빌드에 필요한 비공개 의존성은 현재 트리에 없으며, 코루틴 검사는 엔진 없이 실행할 수 있습니다.
+C++/CLI로 노출된 엔진 API 위에 콘텐츠 개발에서 반복해서 쓰는 기능을 모은 C# 계층입니다. 이 저장소는 구현한 프레임워크 소스를 공개하는 포트폴리오입니다.
 
 ## 목차
 
-- [문제와 제약](#문제와-제약)
-- [설계 결정](#설계-결정)
-- [구현](#구현)
-- [결과](#결과)
-- [실행](#실행)
-- [문서와 변경 이력](#문서와-변경-이력)
-- [기여와 공개 범위](#기여와-공개-범위)
+- [문제와 제약](#문제와-제약) · [설계 결정](#설계-결정) · [구현](#구현) · [실행](#실행) · [문서와 변경 이력](#문서와-변경-이력) · [기여와 공개 범위](#기여와-공개-범위)
 
 ## 문제와 제약
 
-다누리 XR의 C++ 엔진 위에서 3D 콘텐츠를 작성할 때, 액터 초기화와 컴포넌트 조회를 C# 코드에서 다루도록 만든 계층입니다. Unity와 비슷한 생명주기와 API를 사용하도록 구성했습니다.
-
-[JFramework.csproj](JFramework.csproj)는 .NET Framework 4.7.2 라이브러리이며 `CLIInterfaceD.dll` 또는 `CLIInterface.dll`을 참조합니다. 현재 저장소만으로 전체 프레임워크와 엔진을 독립 빌드할 수 없습니다. 코루틴 검사용 .NET 9 프로젝트는 이 빌드와 별개입니다.
+다누리 XR의 C++ 엔진 위에서 3D 콘텐츠를 작성하려면 액터 초기화, 컴포넌트 조회, 프레임 갱신을 C# 코드와 연결해야 합니다. JFramework는 Unity와 비슷한 생명주기와 API로 이 공통 처리를 제공합니다.
 
 ## 설계 결정
 
-| 결정 | 코드에서 확인할 수 있는 동작 | 제약 |
-|---|---|---|
-| C++/CLI 인터페이스 위에 C# 기능 집약 | `JActor`가 엔진의 `Actor`를 상속하고 컴포넌트 조회·생명주기 처리를 제공 | 일부 공개 API에도 `CLIInterface` 타입 노출 |
-| 액터 관리자가 프레임 처리 순서 관리 | `OnStart`, `Update`, 예약 실행, 코루틴, `LateUpdate`를 순서대로 호출 | 실제 엔진 콜백과 연동하려면 비공개 의존성 필요 |
-| 코루틴 소스를 별도 프로젝트에서 검사 | 실제 `JCoroutine.cs`를 링크하고 `Update(float)`로 열거자 진행 | 전체 프레임워크 빌드와 렌더링은 검사 범위 밖 |
+| 결정 | 구현 |
+|---|---|
+| 엔진 연동을 C# 액터 계층에 집약 | `JActor`가 엔진의 `Actor`를 상속하고 컴포넌트 준비·등록·파괴 이벤트 처리 |
+| 액터 관리자가 프레임 처리 순서 관리 | `OnStart`, `Update`, 예약 실행, 코루틴, `LateUpdate` 순서로 호출 |
 
-프록시와 프레임워크에 엔진 조작을 모았지만, 엔진 타입을 완전히 숨기는 구조는 아닙니다. 실제 프록시 구현과 재구성 예제의 차이는 [C++/CLI 프록시 재구성 예제](docs/examples/CliProxyExample.md)에 적었습니다.
+일부 공개 API는 `CLIInterface` 타입을 그대로 사용합니다. 프록시와 공개 C# 코드의 경계는 [C++/CLI 프록시 재구성 예제](docs/examples/CliProxyExample.md)에서 설명합니다.
 
 ## 구현
-
-1. 엔진 콜백을 받은 `JActor.OnCreate()`가 기반 콜백을 호출하고 컴포넌트와 Transform을 준비합니다.
-2. 액터 관리자가 등록된 액터의 프레임 처리와 예약 실행·코루틴을 갱신합니다.
-3. `OnDestroy()`가 파괴 이벤트를 보내고 관리자 등록과 컴포넌트 캐시를 정리합니다.
 
 | 코드 | 역할 |
 |---|---|
@@ -50,22 +41,11 @@
 
 `JCamera`와 `JWidget`은 저장소 안에서 액터 생명주기와 `GetComponent<T>`를 사용하는 소비자입니다.
 
-## 결과
-
-독립 콘솔 검사는 실제 코루틴 소스의 네 가지 시나리오를 확인합니다. [CI](.github/workflows/ci.yml)도 같은 명령을 실행합니다.
-
-| 시나리오 | 확인하는 조건 |
-|---|---|
-| 지연 | `float`를 반환한 코루틴이 갱신 시간을 누적한 뒤 재개 |
-| 중첩 | 부모 시작·자식 시작·자식 종료·부모 종료 순서 |
-| 개별 중단 | 두 루틴 중 하나를 중단한 뒤 개수 1개 유지 |
-| 전체 중단 | 루틴 개수 0개와 실행 중 상태 해제 |
-
-액터·이벤트·타이머·네이티브 연동과 전체 엔진 실행은 이 검사로 검증하지 않습니다. 성능과 콘텐츠 호환성의 측정 결과도 제시하지 않습니다.
-
 ## 실행
 
-.NET 9 SDK가 필요합니다. 2026-10-17에 macOS의 SDK 9.0.305로 아래 명령과 출력을 확인했습니다.
+전체 프레임워크는 .NET Framework 4.7.2와 비공개 `CLIInterface` DLL이 필요해 이 저장소만으로 빌드할 수 없습니다. [JFramework.csproj](JFramework.csproj)에 참조 설정이 있습니다.
+
+엔진 없이 실행할 수 있는 부분은 독립 코루틴 검사입니다. .NET 9 SDK에서 실행합니다.
 
 ```sh
 dotnet run --project tests/JCoroutine.ContractTests
@@ -75,13 +55,15 @@ dotnet run --project tests/JCoroutine.ContractTests
 JCoroutine contracts: 4/4 passed
 ```
 
-`4/4`는 콘솔 프로그램에 정의된 시나리오 수입니다. 검사 코드와 참조 설정은 [JCoroutine.ContractTests](tests/JCoroutine.ContractTests/)에 있습니다.
+[JCoroutine.ContractTests](tests/JCoroutine.ContractTests/)는 실제 `JCoroutine.cs`를 포함해 지연·중첩·개별 중단·전체 중단 시나리오를 검사합니다. [CI](.github/workflows/ci.yml)도 같은 명령을 실행합니다. 전체 엔진·렌더링과 프록시 예제 실행은 검사 범위에 포함하지 않습니다.
 
 ## 문서와 변경 이력
 
-- [C++/CLI 프록시 재구성 예제](docs/examples/CliProxyExample.md)는 네이티브 호출 예시와 공개 C# 코드의 경계를 설명합니다.
-- [커밋 이력](https://github.com/woonyong-choi/dx_framework/commits/main/)에서 공개 저장소의 변경을 확인할 수 있습니다.
-- [이슈](https://github.com/woonyong-choi/dx_framework/issues)에서 작업의 완료 조건과 근거를, [PR](https://github.com/woonyong-choi/dx_framework/pulls)에서 변경과 검증을 확인할 수 있습니다.
+- [C++/CLI 프록시 재구성 예제](docs/examples/CliProxyExample.md)
+- [커밋 이력](https://github.com/woonyong-choi/dx_framework/commits/main/) · [이슈](https://github.com/woonyong-choi/dx_framework/issues) · [PR](https://github.com/woonyong-choi/dx_framework/pulls)
+
+<details>
+<summary>공개 저장소의 주요 변경</summary>
 
 | 변경 | 근거 커밋 |
 |---|---|
@@ -92,8 +74,10 @@ JCoroutine contracts: 4/4 passed
 
 Git 이력은 퇴사 후 소스를 일괄 업로드한 시점부터의 기록입니다. 사내 개발 순서나 기여량을 나타내지 않으며, 초기 반입 바이너리는 과거 커밋에 남아 있습니다.
 
+</details>
+
 ## 기여와 공개 범위
 
-최우녕이 C# 프레임워크와 `HighPrecisionTimer`를 구현해 3D 콘텐츠 개발에 사용했습니다. C++ 엔진·렌더러·셰이더와 실제 C++/CLI 프록시 소스는 ㈜코드쓰리 자산으로 공개하지 않습니다. 프록시 문서는 원본 구현을 복사한 코드가 아닌 재구성 예제입니다.
+최우녕이 C# 프레임워크와 `HighPrecisionTimer`를 구현해 3D 콘텐츠 개발에 사용했습니다. C++ 엔진·렌더러·셰이더와 실제 C++/CLI 프록시 소스는 ㈜코드쓰리 자산으로 공개하지 않습니다. 문서의 프록시 코드는 재구성 예제입니다.
 
 Microsoft의 `RecyclableMemoryStream`은 외부 코드이며 원본의 저작권과 MIT 라이선스 고지를 유지합니다. 저장소 전체에 적용하는 `LICENSE` 파일은 없습니다.
