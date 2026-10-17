@@ -55,12 +55,10 @@ JCoroutine contracts: 4/4 passed
 
 ## 문서와 변경 이력
 
-- 엔진 연동
-  - [C++/CLI 프록시](docs/examples/CliProxyExample.md)
-- 공개 기록
-  - [커밋](https://github.com/woonyong-choi/dx_framework/commits/main/)
-  - [이슈](https://github.com/woonyong-choi/dx_framework/issues)
-  - [PR](https://github.com/woonyong-choi/dx_framework/pulls)
+- [C++/CLI 프록시](docs/examples/CliProxyExample.md)
+- [커밋](https://github.com/woonyong-choi/dx_framework/commits/main/)
+- [이슈](https://github.com/woonyong-choi/dx_framework/issues)
+- [PR](https://github.com/woonyong-choi/dx_framework/pulls)
 
 <details>
 <summary>공개 저장소의 주요 변경</summary>
