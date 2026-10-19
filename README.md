@@ -35,7 +35,7 @@ C++/CLI로 노출된 엔진 API 위에 콘텐츠 개발에서 반복해서 쓰�
 | [MainCore](Sources/1.%20JEngine/6.%20DanuriEngine/2.%20MainCore/) | 씬 전환·입력·ray picking |
 | [HighPrecisionTimer](HighPrecisionTimer/) | 별도 타이머 프로젝트 |
 
-`JCamera`와 `JWidget`은 저장소 안에서 액터 생명주기와 `GetComponent<T>`를 사용하는 소비자입니다.
+`JCamera`와 `JWidget`은 저장소 안에서 액터 생명주기와 `GetComponent<T>`를 사용하는 클래스입니다.
 
 ## 실행
 
